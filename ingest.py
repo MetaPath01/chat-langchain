@@ -8,6 +8,7 @@ from langchain.vectorstores.faiss import FAISS
 
 from dotenv import load_dotenv
 from pathlib import Path
+import sys
 
 if getattr(sys, 'frozen', False):
     script_location = pathlib.Path(sys.executable).parent.resolve()
