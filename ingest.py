@@ -6,6 +6,14 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores.faiss import FAISS
 
+from dotenv import load_dotenv
+from pathlib import Path
+
+if getattr(sys, 'frozen', False):
+    script_location = pathlib.Path(sys.executable).parent.resolve()
+else:
+    script_location = pathlib.Path(__file__).parent.resolve()
+load_dotenv(dotenv_path=script_location / '.env')
 
 def ingest_docs():
     """Get documents from web pages."""
