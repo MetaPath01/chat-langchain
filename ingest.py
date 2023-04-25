@@ -11,9 +11,9 @@ from pathlib import Path
 import sys
 
 if getattr(sys, 'frozen', False):
-    script_location = pathlib.Path(sys.executable).parent.resolve()
+    script_location = Path(sys.executable).parent.resolve()
 else:
-    script_location = pathlib.Path(__file__).parent.resolve()
+    script_location = Path(__file__).parent.resolve()
 load_dotenv(dotenv_path=script_location / '.env')
 
 def ingest_docs():
