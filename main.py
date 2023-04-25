@@ -1,7 +1,9 @@
 """Main entrypoint for the app."""
 import logging
+import pathlib
 import pickle
 from pathlib import Path
+import sys
 from typing import Optional
 
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
@@ -11,6 +13,14 @@ from langchain.vectorstores import VectorStore
 from callback import QuestionGenCallbackHandler, StreamingLLMCallbackHandler
 from query_data import get_chain
 from schemas import ChatResponse
+
+from dotenv import load_dotenv
+
+if getattr(sys, 'frozen', False):
+    script_location = pathlib.Path(sys.executable).parent.resolve()
+else:
+    script_location = pathlib.Path(__file__).parent.resolve()
+load_dotenv(dotenv_path=script_location / '.env')
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -38,7 +48,7 @@ async def websocket_endpoint(websocket: WebSocket):
     question_handler = QuestionGenCallbackHandler(websocket)
     stream_handler = StreamingLLMCallbackHandler(websocket)
     chat_history = []
-    qa_chain = get_chain(vectorstore, question_handler, stream_handler)
+    qa_chain = get_chain(vectorstore, question_handler, stream_handler,True)
     # Use the below line instead of the above line to enable tracing
     # Ensure `langchain-server` is running
     # qa_chain = get_chain(vectorstore, question_handler, stream_handler, tracing=True)
