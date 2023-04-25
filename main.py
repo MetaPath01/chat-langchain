@@ -31,7 +31,8 @@ vectorstore: Optional[VectorStore] = None
 async def startup_event():
     logging.info("loading vectorstore")
     if not Path("vectorstore.pkl").exists():
-        raise ValueError("vectorstore.pkl does not exist, please run ingest.py first")
+        raise ValueError(
+            "vectorstore.pkl does not exist, please run ingest.py first")
     with open("vectorstore.pkl", "rb") as f:
         global vectorstore
         vectorstore = pickle.load(f)
@@ -48,7 +49,7 @@ async def websocket_endpoint(websocket: WebSocket):
     question_handler = QuestionGenCallbackHandler(websocket)
     stream_handler = StreamingLLMCallbackHandler(websocket)
     chat_history = []
-    qa_chain = get_chain(vectorstore, question_handler, stream_handler,True)
+    qa_chain = get_chain(vectorstore, question_handler, stream_handler, True)
     # Use the below line instead of the above line to enable tracing
     # Ensure `langchain-server` is running
     # qa_chain = get_chain(vectorstore, question_handler, stream_handler, tracing=True)
@@ -87,4 +88,4 @@ async def websocket_endpoint(websocket: WebSocket):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="", port=9000)
+    uvicorn.run(app, port=9000)
