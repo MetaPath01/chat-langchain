@@ -6,3 +6,5 @@ start:
 format:
 	black .
 	isort .
+dataset_vector_swft:
+	python3 ingest_swft.py
