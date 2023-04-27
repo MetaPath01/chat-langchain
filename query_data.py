@@ -27,13 +27,13 @@ def get_chain(
         stream_manager.add_handler(tracer)
 
     question_gen_llm = OpenAIChat(
-        model="gpt-4",
+        model_name="gpt-4",
         temperature=0,
         verbose=True,
         callback_manager=question_manager,
     )
     streaming_llm = OpenAIChat(
-        model="gpt-4",
+        model_name="gpt-4",
         streaming=True,
         callback_manager=stream_manager,
         verbose=True,
