@@ -25,7 +25,7 @@ def ingest_docs():
         chunk_overlap=200,
     )
     documents = text_splitter.split_documents(raw_documents)
-    embeddings = OpenAIEmbeddings()
+    embeddings = OpenAIEmbeddings(model="gpt-4")
     vectorstore = FAISS.from_documents(documents, embeddings)
 
     # Save vectorstore

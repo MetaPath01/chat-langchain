@@ -1,7 +1,7 @@
 """Create a ChatVectorDBChain for question/answering."""
 from langchain.callbacks.base import AsyncCallbackManager
 from langchain.callbacks.tracers import LangChainTracer
-from langchain.chains import ConversationalRetrievalChain,ChatVectorDBChain
+from langchain.chains import ConversationalRetrievalChain, ChatVectorDBChain
 from langchain.chains.chat_vector_db.prompts import (CONDENSE_QUESTION_PROMPT,
                                                      QA_PROMPT)
 from langchain.chains.llm import LLMChain
@@ -27,11 +27,13 @@ def get_chain(
         stream_manager.add_handler(tracer)
 
     question_gen_llm = OpenAI(
+        model="gpt-4",
         temperature=0,
         verbose=True,
         callback_manager=question_manager,
     )
     streaming_llm = OpenAI(
+        model="gpt-4",
         streaming=True,
         callback_manager=stream_manager,
         verbose=True,
