@@ -18,7 +18,7 @@ load_dotenv(dotenv_path=script_location / '.env')
 
 def ingest_docs():
     """Get documents from web pages."""
-    loader = CSVLoader("dataset/")
+    loader = CSVLoader("dataset/dataset 20230426-121810.csv")
     raw_documents = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
