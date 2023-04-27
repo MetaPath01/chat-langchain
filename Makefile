@@ -1,6 +1,6 @@
 .PHONY: start
 start:
-	uvicorn main:app --reload --host "" --port 9000 >> ./root.log 2>&1 & 
+	uvicorn main:app --reload --port 9000 >> ./root.log 2>&1 & 
 
 .PHONY: format
 format:
