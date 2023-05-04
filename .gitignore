@@ -138,4 +138,6 @@ dmypy.json
 vectorstore.pkl
 langchain.readthedocs.io/
 *_venv/
-*.csv
+**/*.csv
+*.faiss
+*.pkl
