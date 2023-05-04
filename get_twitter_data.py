@@ -20,49 +20,28 @@ userName = args.userName
 
 
 def get_twitter_auth():
-    auth = tweepy.OAuthHandler(
-        os.getenv("TWITTER_API_KEY"), os.getenv("TWITTER_API_KEY_SECRET"))
-    auth.set_access_token(os.getenv("TWITTER_ACCESS_TOKE"),
-                          os.getenv("TWITTER_ACCESS_SECRET"))
-    return auth
-
-
-def get_twitter_client() -> tweepy.Client:
-    # auth = get_twitter_auth()
-    bearer_token = os.getenv("TWITTER_BEARER_TOKEN")
     api_key = os.getenv("TWITTER_API_KEY")
     api_key_secret = os.getenv("TWITTER_API_KEY_SECRET")
     access_token = os.getenv("TWITTER_ACCESS_TOKEN")
     access_token_secret = os.getenv("TWITTER_ACCESS_SECRET")
-    print(f"bearer_token: {bearer_token}")
-    # print(f"api_key: {api_key}")
-    # print(f"api_key_secret: {api_key_secret}")
-    # print(f"access_token: {access_token}")
-    # print(f"access_token_secret: {access_token_secret}")
-    client = tweepy.Client(bearer_token=bearer_token,
-                        #    consumer_key=api_key,
-                        #    consumer_secret=api_key_secret,
-                        #    access_token=access_token,
-                        #    access_token_secret=access_token_secret,
-                           wait_on_rate_limit=True)
-    # client = tweepy.API(auth, wait_on_rate_limit=True)
-    return client
+    auth = tweepy.OAuthHandler(api_key, api_key_secret)
+    auth.set_access_token(access_token, access_token_secret)
+    return auth
 
+def get_twitter_client():
+    auth = get_twitter_auth()
+    client = tweepy.API(auth, wait_on_rate_limit=True)
+    return client
 
 def fetch_all_tweets(username):
     client = get_twitter_client()
-    query = f"from:{username}"
-    response = client.search_all_tweets(
-        query=query, max_results=100, expansions="author_id", tweet_fields=["created_at"])
-    all_tweets = response.include_author_data(response.data)
+    all_tweets = []
 
-    while response.next_token:
-        response = client.search_all_tweets(query=query, max_results=100, expansions="author_id", tweet_fields=[
-            "created_at"], next_token=response.next_token)
-        all_tweets.extend(response.include_author_data(response.data))
+    # 每次请求最多可以获取200条推文
+    for page in tweepy.Cursor(client.user_timeline, screen_name=username, count=200, tweet_mode='extended').pages():
+        all_tweets.extend(page)
 
     return all_tweets
-
 
 def save_tweets_to_csv(tweets, file_name="tweets.csv"):
     with open(file_name, mode='w', encoding='utf-8', newline='') as f:
