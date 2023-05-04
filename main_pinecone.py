@@ -18,6 +18,7 @@ from langchain.vectorstores import Pinecone
 from langchain.embeddings import OpenAIEmbeddings
 
 from dotenv import load_dotenv
+import os
 
 if getattr(sys, 'frozen', False):
     script_location = pathlib.Path(sys.executable).parent.resolve()
